@@ -22,7 +22,7 @@ public class UpdateActivity extends AppCompatActivity implements View.OnClickLis
     SessionManager sessionManager;
     String name, gmail,pass,id;
     ApiInterface apiInterface;
-    Button btnUpdate;
+    Button btnUpdate,btnDelete;
 
 
     @Override
@@ -50,6 +50,8 @@ public class UpdateActivity extends AppCompatActivity implements View.OnClickLis
 
         btnUpdate = findViewById(R.id.btnUpdate);
         btnUpdate.setOnClickListener(this);
+        btnDelete = findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(this);
 
 
 
@@ -65,6 +67,10 @@ public class UpdateActivity extends AppCompatActivity implements View.OnClickLis
                 name = etName.getText().toString();
                 update(id,gmail, pass, name);
                 break;
+            case R.id.btnDelete:
+                id = etid.getText().toString();
+                delete(id);
+                break;
 
         }
     }
@@ -73,6 +79,31 @@ public class UpdateActivity extends AppCompatActivity implements View.OnClickLis
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<Update> call = apiInterface.updateResponse(id,username, password, name);
+        call.enqueue(new Callback<Update>() {
+            @Override
+            public void onResponse(Call<Update> call, Response<Update> response) {
+                if(response.body() != null && response.isSuccessful() && response.body().isStatus()){
+                    Toast.makeText(UpdateActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(UpdateActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(UpdateActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Update> call, Throwable t) {
+                Toast.makeText(UpdateActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+    private void delete(String id) {
+
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<Update> call = apiInterface.deleteResponse(id);
         call.enqueue(new Callback<Update>() {
             @Override
             public void onResponse(Call<Update> call, Response<Update> response) {

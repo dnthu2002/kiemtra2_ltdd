@@ -31,11 +31,9 @@ public class MainActivity extends AppCompatActivity {
         id = sessionManager.getUserDetail().get(SessionManager.USER_ID);
         name = sessionManager.getUserDetail().get(SessionManager.NAME);
         username = sessionManager.getUserDetail().get(SessionManager.USERNAME);
-
-        etid.setText(id);
-        etName.setText(name);
-        etUsername.setText(username);
-
+            etid.setText(id);
+            etName.setText(name);
+            etUsername.setText(username);
 
     }
 

@@ -34,4 +34,9 @@ public interface ApiInterface {
             @Field("password") String password,
             @Field("name") String name
     );
+    @FormUrlEncoded
+    @POST("delete.php")
+    Call<Update> deleteResponse(
+            @Field("id") String id
+    );
 }
